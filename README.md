@@ -1,3 +1,3 @@
 #All scripts required to reproduce the analysis.
 
-Run make [step] to run a particular step or make all to run all steps.
+Run __make [rule]__ to run a particular step or __make all__ to run all steps.
