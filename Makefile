@@ -17,7 +17,6 @@ fastqc_qc_trimmed:
 	mkdir ../FastQC_out_trimmed; \
 	for f in ../*fastq; do \
 		fastqc --outdir ../FastQC_out_trimmed --threads 8 --noextract $$f; \
-		break; \
 	done
 
 interleave_pe:
