@@ -22,6 +22,12 @@ fastqc_qc_trimmed:
 interleave_pe:
 	qsub interleave.sh
 
+normalize_pe:
+	qsub normalize_pe.sh
+
+normalize_se:
+	qsub normalize_se.sh
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
