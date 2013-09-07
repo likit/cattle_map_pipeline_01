@@ -28,6 +28,9 @@ normalize_pe:
 normalize_se:
 	qsub normalize_se.sh
 
+filter_abund:
+	qsub filter_abund.sh
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
