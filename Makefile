@@ -31,6 +31,36 @@ normalize_se:
 filter_abund:
 	qsub filter_abund.sh
 
+extract_paired_reads:
+	qsub extract_paired_reads.sh
+
+merge_abundfilt_se:
+	for f in *abundfilt.se; do \
+		base_filename=$$(basename $$f .pe_trim.fastq.keep.abundfilt.se); \
+		unpaired_filename=$$(echo $$base_filename | sed 's/R1/R1\&2/').trim_unpaired.fastq.keep.abundfilt; \
+		new_filename=$$base_filename.se.qc.keep.abundfilt.gz; \
+		echo "merging..." $$unpaired_filename $$f "to" $$new_filename; \
+		cat $$unpaired_filename $$f | gzip -c > $$new_filename; \
+	done
+
+rename_abundfilt_pe:
+	for f in *.pe_trim.fastq.keep.abundfilt.pe; do \
+		newname=$$(basename $$f .pe_trim.fastq.keep.abundfilt.pe).pe.qc.keep.abundfilt; \
+		echo "renaming" $$f "to" $$newname; \
+		cp $$f $$newname; \
+		gzip $$newname; \
+	done; \
+	cat *.1 | left.fq; \
+	cat *.2 | right.fq
+
+split_paired_reads:
+	for f in *.pe.qc.keep.abundfilt.gz; do \
+	 python ~/khmer/scripts/split-paired-reads.py $$f; \
+	done
+
+run_trinity:
+	qsub trinity_job.sh
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
