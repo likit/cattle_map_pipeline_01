@@ -61,6 +61,15 @@ split_paired_reads:
 run_trinity:
 	qsub trinity_job.sh
 
+partition_transcripts:
+	python ~/khmer/scripts/do-partition.py -x 1e9 -N 4 --threads 4 taurus Trinity.fasta
+
+seqclean_transcripts:
+	~/seqclean-x86_64/seqclean Trinity.fasta -c 4
+
+partition_cleaned_transcripts:
+	python ~/khmer/scripts/do-partition.py -x 1e9 -N 4 --threads 4 taurus Trinity.fasta.clean
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
