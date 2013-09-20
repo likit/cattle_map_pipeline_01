@@ -14,7 +14,7 @@ quality_trim_single:
 	done
 
 merge_qc_trimmed_single:
-	python scripts/merge_qc_se_reads.py ../raw
+	python merge_qc_se_reads.py ../raw
 
 fastqc_qc_trimmed:
 	mkdir ../FastQC_out_trimmed; \
