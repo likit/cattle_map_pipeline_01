@@ -44,7 +44,7 @@ extract_paired_reads:
 	qsub extract_paired_reads.sh
 
 merge_abundfilt_se:
-	for f in *abundfilt.se; do \
+	for f in ../raw/*abundfilt.se; do \
 		base_filename=$$(basename $$f .pe_trim.fastq.keep.abundfilt.se); \
 		unpaired_filename=$$(echo $$base_filename | sed 's/R1/R1\&2/').trim_unpaired.fastq.keep.abundfilt; \
 		new_filename=$$base_filename.se.qc.keep.abundfilt.gz; \
@@ -53,7 +53,7 @@ merge_abundfilt_se:
 	done
 
 rename_abundfilt_pe:
-	for f in *.pe_trim.fastq.keep.abundfilt.pe; do \
+	for f in ../raw/*.pe_trim.fastq.keep.abundfilt.pe; do \
 		newname=$$(basename $$f .pe_trim.fastq.keep.abundfilt.pe).pe.qc.keep.abundfilt; \
 		echo "renaming" $$f "to" $$newname; \
 		cp $$f $$newname; \
@@ -63,7 +63,7 @@ rename_abundfilt_pe:
 	cat *.2 | right.fq
 
 split_paired_reads:
-	for f in *.pe.qc.keep.abundfilt.gz; do \
+	for f in ../raw/*.pe.qc.keep.abundfilt.gz; do \
 	 python ~/khmer/scripts/split-paired-reads.py $$f; \
 	done
 
