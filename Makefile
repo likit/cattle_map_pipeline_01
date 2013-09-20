@@ -1,5 +1,8 @@
 trim_adapter:
-	python write_trimmomatic_script.py ../raw; for f in *.gz_job.sh; do qsub "$f"; done
+	python write_trimmomatic_script.py ../raw
+	for f in *.gz_job.sh; do \
+	qsub "$f"; \
+	done
 
 quality_trim_paired:
 	python write_condetri_job.py ../raw; for f in *.pe_condetri_job.sh; do qsub "$f"; done
