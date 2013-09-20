@@ -1,7 +1,7 @@
 trim_adapter:
 	python write_trimmomatic_script.py ../raw
 	for f in *.gz_job.sh; do \
-	qsub "$f"; \
+	qsub "$$f"; \
 	done
 
 quality_trim_paired:
