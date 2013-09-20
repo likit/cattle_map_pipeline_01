@@ -20,9 +20,12 @@ fastqc_qc_trimmed:
 	if [ ! -d ../FastQC_out_trimmed ]; then \
 		mkdir ../FastQC_out_trimmed; \
 	fi; \
-	for f in ../raw/*unpaired*fastq; do \
+	for f in ../raw/*001.trim_unpaired.fastq; do \
 		fastqc --outdir ../FastQC_out_trimmed --threads 8 --noextract $$f; \
-	done
+	done; \
+	for f in ../raw/*trim?.fastq; do \
+		fastqc --outdir ../FastQC_out_trimmed --threads 8 --noextract $$f; \
+	done	
 
 interleave_pe:
 	qsub interleave.sh
