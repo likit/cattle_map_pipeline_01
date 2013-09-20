@@ -5,7 +5,7 @@
 #PBS -N Interleave_all_paired_reads
 
 cd /mnt/lustre_scratch_2012/preeyanon/cattle_map/paired/diginorm
-find ../qc_trimmed/ -name "*pe_trim1.fastq" | while read FILE
+find ../raw/ -name "*pe_trim1.fastq" | while read FILE
 do
     r1=$FILE
     r2=$(echo $FILE | sed s/trim1/trim2/)
