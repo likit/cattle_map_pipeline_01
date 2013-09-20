@@ -18,7 +18,6 @@ def main():
         header = '''
 #!/bin/sh -login
 #PBS -l nodes=1:ppn=4,mem=24gb,walltime=12:00:00
-#PBS -M preeyano@msu.edu
 #PBS -m abe
 #PBS -N Trimmomatic_%s
 #PBS -A ged-intel11
