@@ -3,5 +3,5 @@
 #PBS -m abe
 #PBS -N Normalize_C20_k20_paired
 
-cd /mnt/lustre_scratch_2012/preeyanon/cattle_map/paired/diginorm
-python ~/khmer/scripts/normalize-by-median.py -C 20 --loadhash normC20k20.kh --savehash normC20k20.kh ../qc_trimmed/*trim_unpaired.fastq
+cd /mnt/lustre_scratch_2012/preeyanon/cattle_map/paired/raw
+python ~/khmer/scripts/normalize-by-median.py -C 20 --loadhash normC20k20.kh --savehash normC20k20.kh *trim_unpaired.fastq
