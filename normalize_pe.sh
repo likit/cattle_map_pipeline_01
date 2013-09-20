@@ -1,6 +1,5 @@
 #!/bin/sh -login
 #PBS -l nodes=1:ppn=1,mem=24gb,walltime=24:00:00
-#PBS -M preeyano@msu.edu
 #PBS -m abe
 #PBS -N Normalize_C20_k20_paired
 
