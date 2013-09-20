@@ -17,8 +17,10 @@ merge_qc_trimmed_single:
 	python merge_qc_se_reads.py ../raw
 
 fastqc_qc_trimmed:
-	mkdir ../FastQC_out_trimmed; \
-	for f in ../*fastq; do \
+	if [ ! -d ../FastQC_out_trimmed ]; then \
+		mkdir ../FastQC_out_trimmed; \
+	fi; \
+	for f in ../raw/*unpaired*fastq; do \
 		fastqc --outdir ../FastQC_out_trimmed --threads 8 --noextract $$f; \
 	done
 
