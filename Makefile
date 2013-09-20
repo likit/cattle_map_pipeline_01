@@ -17,6 +17,7 @@ merge_qc_trimmed_single:
 	python merge_qc_se_reads.py ../raw
 
 fastqc_qc_trimmed:
+	module load FastQC; \
 	if [ ! -d ../FastQC_out_trimmed ]; then \
 		mkdir ../FastQC_out_trimmed; \
 	fi; \
