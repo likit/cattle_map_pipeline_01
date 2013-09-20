@@ -5,7 +5,7 @@ trim_adapter:
 	done
 
 quality_trim_paired:
-	python write_condetri_job.py ../raw; for f in *.pe_condetri_job.sh; do qsub "$f"; done
+	python write_condetri_job.py ../raw; for f in *.pe_condetri_job.sh; do qsub "$$f"; done
 
 quality_trim_single:
 	python merge_se_reads.py ../raw/; \
