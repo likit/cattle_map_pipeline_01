@@ -81,6 +81,10 @@ partition_cleaned_transcripts:
 
 rename_partitions:
 	python ~/eel-pond/rename-with-partitions.py taurus Trinity.fasta.part
+	
+download_mouse_proteins:
+	curl -O ftp://ftp.ncbi.nih.gov/refseq/M_musculus/mRNA_Prot/mouse.protein.faa.gz
+	gunzip mouse.protein.faa.gz
 
 clean:
 	rm *pe_trim_unpaired.fastq; \
