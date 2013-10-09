@@ -85,6 +85,10 @@ rename_partitions:
 download_mouse_proteins:
 	curl -O ftp://ftp.ncbi.nih.gov/refseq/M_musculus/mRNA_Prot/mouse.protein.faa.gz
 	gunzip mouse.protein.faa.gz
+	
+build_blastdb:
+	formatdb -i trinity-nematostella.renamed.fa -o T -p F
+	formatdb -i mouse.protein.faa -o T -p T
 
 clean:
 	rm *pe_trim_unpaired.fastq; \
