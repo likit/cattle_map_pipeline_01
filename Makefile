@@ -90,6 +90,10 @@ build_blastdb:
 	formatdb -i trinity-nematostella.renamed.fa -o T -p F
 	formatdb -i mouse.protein.faa -o T -p T
 
+reciprocal_blast:
+	qsub run_blast_cow_x_mouse.sh
+	qsub run_blast_mouse_x_cow.sh
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
