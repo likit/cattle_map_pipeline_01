@@ -79,6 +79,9 @@ seqclean_transcripts:
 partition_cleaned_transcripts:
 	python ~/khmer/scripts/do-partition.py -x 1e9 -N 4 --threads 4 taurus Trinity.fasta.clean
 
+rename_partitions:
+	python ~/eel-pond/rename-with-partitions.py taurus Trinity.fasta.part
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
