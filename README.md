@@ -10,3 +10,4 @@ Run __make [rule]__ to run a particular step or __make all__ to run all steps.
 * Khmer
 * Bowtie 1.0.0
 * Trinity/20130225
+* blast 2.2.26
