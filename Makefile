@@ -86,14 +86,35 @@ download_mouse_proteins:
 	curl -O ftp://ftp.ncbi.nih.gov/refseq/M_musculus/mRNA_Prot/mouse.protein.faa.gz
 	gunzip mouse.protein.faa.gz
 	
+download_human_proteins:
+	curl -O ftp://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/human.protein.faa.gz
+	gunzip human.protein.faa.gz
+	
+download_cow_proteins:
+	curl -O ftp://ftp.ncbi.nih.gov/refseq/B_taurus/mRNA_Prot/cow.protein.faa.gz
+	guzip cow.protein.faa.gz
+
 build_blastdb:
-	formatdb -i trinity-nematostella.renamed.fa -o T -p F
+	formatdb -i Trinity.fasta.part.renamed.fasta -o T -p F
 	formatdb -i mouse.protein.faa -o T -p T
 
+build_blastdb_human:
+	formatdb -i human.protein.faa -o T -p T
+	
+build_blastdb_cow:
+	formatdb -i cow.protein.faa -o T -p T
+	
 reciprocal_blast:
 	qsub run_blast_cow_x_mouse.sh
 	qsub run_blast_mouse_x_cow.sh
 
+annotate:
+	python ~/eel-pond/make-uni-best-hits.py cow.x.mouse cow.x.mouse.homol
+	python ~/eel-pond/make-reciprocal-best-hits.py cow.x.mouse mouse.x.cow cow.x.mouse.ortho
+	python ~/eel-pond/make-namedb.py mouse.protein.faa mouse.namedb
+	python -m screed.fadbm mouse.protein.faa
+	python ~/eel-pond/annotate-seqs.py Trinity.fasta.part.renamed.fasta cow.x.mouse.ortho cow.x.mouse.homol
+	
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
