@@ -97,6 +97,9 @@ reciprocal_blast:
 annotate:
 	python ~/eel-pond/make-uni-best-hits.py cow.x.mouse cow.x.mouse.homol
 	python ~/eel-pond/make-reciprocal-best-hits.py cow.x.mouse mouse.x.cow cow.x.mouse.ortho
+	python ~/eel-pond/make-namedb.py mouse.protein.faa mouse.namedb
+	python -m screed.fadbm mouse.protein.faa
+	python ~/eel-pond/annotate-seqs.py Trinity.fasta.part.renamed.fasta cow.x.mouse.ortho cow.x.mouse.homol
 	
 clean:
 	rm *pe_trim_unpaired.fastq; \
