@@ -94,6 +94,10 @@ reciprocal_blast:
 	qsub run_blast_cow_x_mouse.sh
 	qsub run_blast_mouse_x_cow.sh
 
+annotate:
+	python ~/eel-pond/make-uni-best-hits.py cow.x.mouse cow.x.mouse.homol
+	python ~/eel-pond/make-reciprocal-best-hits.py cow.x.mouse mouse.x.cow cow.x.mouse.ortho
+	
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
