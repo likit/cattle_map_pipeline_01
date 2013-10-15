@@ -23,7 +23,7 @@ tophat -o ../%s_tophat_out -r 150 -p 4 ../bosTau7.fa.masked %s %s
 
         header = header % os.path.split(f)[-1]
         command = command % (os.path.abspath(reads_dir), f1, f1, f2)
-        fp = open('scripts/%s_tophat_job.sh' % f1, 'w')
+        fp = open('%s_tophat_job.sh' % f1, 'w')
         print >> fp, header
         print >> fp, command
         fp.close()
