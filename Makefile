@@ -115,6 +115,12 @@ annotate:
 	python -m screed.fadbm mouse.protein.faa
 	python ~/eel-pond/annotate-seqs.py Trinity.fasta.part.renamed.fasta cow.x.mouse.ortho cow.x.mouse.homol
 	
+tophat_map:
+	python write_tophat_job.py ../qc_trimmed
+	for f in *tophat_job.sh; do \
+		qsub $$f; \
+	done
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
