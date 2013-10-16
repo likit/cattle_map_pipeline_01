@@ -121,6 +121,12 @@ tophat_map:
 		qsub $$f; \
 	done
 
+rsem:
+	cd /mnt/ls12/preeyanon/cattle_map/paired/assembly/trinity_out_dir_stranded_new_partitions; \
+	extract-transcript-to-gene-map-from-trinity Trinity.fasta.part.renamed.fasta Trinity.mapfile
+	cd /mnt/ls12/preeyanon/cattle_map/paired/assembly/trinity_out_dir_stranded_new_partitions; \
+	rsem-prepare-reference --transcript-to-gene-map Trinity.mapfile Trinity.fasta.part.renamed.fasta taurus
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
