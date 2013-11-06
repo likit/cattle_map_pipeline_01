@@ -18,7 +18,7 @@ def main():
         command = '''
 module load TopHat/2.0.8b
 cd %s
-tophat -o ../%s_tophat_out -r 150 -p 4 ../bosTau7.fa.masked %s %s
+tophat -o ../%s_tophat_out -r 150 -p 4 --library-type fr-firststrand ../bosTau7.fa.masked %s %s
 '''
 
         header = header % os.path.split(f)[-1]
