@@ -7,5 +7,5 @@
 module load bowtie/1.0.0
 module load RSEM
 
-cd /mnt/ls12/preeyanon/cattle_map/paired/assembly/trinity_out_dir_stranded_new_partitions
-rsem-prepare-reference --transcript-to-gene-map Trinity.mapfile Trinity.fasta.part.renamed.fasta taurus
+cd /mnt/ls12/preeyanon/cattle_map/paired/assembly/trinity_out_dir_stranded
+rsem-prepare-reference --transcript-to-gene-map Trinity.mapfile Trinity.fasta.part.renamed.fasta Trinity_part
