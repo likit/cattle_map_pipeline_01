@@ -1,5 +1,5 @@
 #!/bin/sh -login
-#PBS -l nodes=1:ppn=4,mem=24gb,walltime=72:00:00
+#PBS -l nodes=1:ppn=8,mem=24gb,walltime=72:00:00
 #PBS -m abe
 #PBS -N blast_human_x_cow_transcripts
 #PBS -A ged-intel11
