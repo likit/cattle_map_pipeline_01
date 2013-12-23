@@ -127,6 +127,9 @@ rsem:
 	cd /mnt/ls12/preeyanon/cattle_map/paired/assembly/trinity_out_dir_stranded_new_partitions; \
 	rsem-prepare-reference --transcript-to-gene-map --no-bowtie Trinity.mapfile Trinity.fasta.part.renamed.fasta taurus
 
+count_reads:
+	samtools view -S -H 4642MAP_CGATGT_L001_cdna_bowtie2_raw.sam | python header_to_bed.py > sequences.bed
+
 clean:
 	rm *pe_trim_unpaired.fastq; \
 	rm *se_trim.fastq
