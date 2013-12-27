@@ -79,6 +79,7 @@ split_paired_reads:
 	done
 	cat *.1 > left.fq; \
 	cat *.2 > right.fq
+	gunzip -c *.se.qc.keep.abundfilt.fq.gz >> left.fq
 
 run_trinity:
 
