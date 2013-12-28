@@ -1,24 +1,24 @@
 trim_adapter:
 
-	python write_trimmomatic_script.py ../raw
-	for f in *.gz_job.sh; do \
-	qsub "$$f"; \
-	done
+	python protocols/write_trimmomatic_script.py raw
+	#for f in *.gz_job.sh; do qsub "$$f"; done
+	#rm *.gz_job.sh
 
 quality_trim_paired:
 
-	python write_condetri_job.py ../raw; for f in *.pe_condetri_job.sh; do qsub "$$f"; done
+	python protocols/write_condetri_job.py raw; for f in *.pe_condetri_job.sh; do qsub "$$f"; done
+	rm *.pe_condetri_job.sh
 
 quality_trim_single:
 
-	python merge_se_reads.py ../raw/; \
-	for f in ../raw/*fq.se; do \
+	python protocols/merge_se_reads.py raw/; \
+	for f in raw/*fq.se; do \
 		perl ~/condetri_v2.1.pl -fastq1=$$f -sc=33 | tee $$f.condetri_se_log; \
 	done
 
 merge_qc_trimmed_single:
 
-	python merge_qc_se_reads.py ../raw
+	python protocols/merge_qc_se_reads.py raw
 
 fastqc_qc_trimmed:
 
