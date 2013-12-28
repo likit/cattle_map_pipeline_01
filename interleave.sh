@@ -3,7 +3,7 @@
 #PBS -m abe
 #PBS -N Interleave_all_paired_reads
 
-cd /mnt/lustre_scratch_2012/preeyanon/cattle_map/paired/
+cd ${PBS_O_WORKDIR}
 find ./raw/ -name "*pe_trim1.fastq" | while read FILE
 do
     r1=$FILE
