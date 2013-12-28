@@ -35,7 +35,7 @@ fastqc_qc_trimmed:
 
 interleave_pe:
 
-	qsub interleave.sh
+	qsub protocols/interleave.sh
 
 normalize_pe:
 
