@@ -39,11 +39,11 @@ interleave_pe:
 
 normalize_pe:
 
-	qsub normalize_pe.sh
+	qsub protocols/normalize_pe.sh
 
 normalize_se:
 
-	qsub normalize_se.sh
+	qsub protocols/normalize_se.sh
 
 filter_abund:
 
