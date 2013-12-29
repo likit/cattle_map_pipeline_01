@@ -9,5 +9,5 @@ do
     r1=$FILE
     r2=$(echo $FILE | sed s/trim1/trim2/)
     out=$(echo $(basename $FILE) | sed s/trim1/trim/)
-    python ~/khmer/scripts/interleave-reads.py $r1 $r2 > $out
+    python ~/khmer/scripts/interleave-reads.py $r1 $r2 > raw/$out
 done
