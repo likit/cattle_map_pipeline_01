@@ -24,11 +24,11 @@ def main():
 '''
 
         command = '''
-cd %s
-java -jar ~/Trimmomatic-0.30/trimmomatic-0.30.jar PE -threads 4 -phred33 %s %s %s %s %s %s ILLUMINACLIP:../scripts/TruSeq2-PE.fa:2:30:10 MINLEN:50
+cd ${PBS_O_WORKDIR} 
+java -jar ~/Trimmomatic-0.30/trimmomatic-0.30.jar PE -threads 4 -phred33 %s %s %s %s %s %s ILLUMINACLIP:./protocols/TruSeq2-PE.fa:2:30:10 MINLEN:50
 '''
         header = header % os.path.split(m1)[-1]
-        command = command % (os.path.abspath(reads_dir), m1, m2, m1_pe, m1_se, m2_pe, m2_se)
+        command = command % (m1, m2, m1_pe, m1_se, m2_pe, m2_se)
         fp = open('%s_job.sh' % os.path.split(f)[-1], 'w')
         print >> fp, header
         print >> fp, command
