@@ -40,14 +40,16 @@ interleave_pe:
 normalize_pe:
 
 	qsub protocols/normalize_pe.sh
+	mv *keep raw/
 
 normalize_se:
 
 	qsub protocols/normalize_se.sh
+	mv *keep raw/
 
 filter_abund:
 
-	qsub filter_abund.sh
+	qsub protocols/filter_abund.sh
 
 extract_paired_reads:
 
