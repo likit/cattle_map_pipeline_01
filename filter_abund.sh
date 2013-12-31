@@ -4,6 +4,5 @@
 #PBS -N Abundance_filtering
 #PBS -A ged-intel11
 
-
-cd /mnt/lustre_scratch_2012/preeyanon/cattle_map/paired/diginorm
-python ~/khmer/scripts/filter-abund.py -V normC20k20.kh *keep
+cd ${PBS_O_WORKDIR}
+python ~/khmer/scripts/filter-abund.py -V normC20k20.kh raw/*keep
