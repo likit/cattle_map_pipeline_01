@@ -5,4 +5,4 @@
 #PBS -A ged-intel11
 
 cd ${PBS_O_WORKDIR}
-python ~/khmer/scripts/filter-abund.py -V normC20k20.kh raw/*keep
+python ~/khmer/scripts/filter-abund.py -V normC20k20.kh *keep
