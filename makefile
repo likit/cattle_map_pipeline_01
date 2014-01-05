@@ -1,63 +1,61 @@
-trim_adapter:
+trim-adapter:
 
-	python protocols/write_trimmomatic_script.py raw
+	python protocol/write_trimmomatic_script.py raw
 	#for f in *.gz_job.sh; do qsub "$$f"; done
 	#rm *.gz_job.sh
 
-quality_trim_paired:
+quality-trim-paired:
 
-	python protocols/write_condetri_job.py raw; for f in *.pe_condetri_job.sh; do qsub "$$f"; done
+	python protocol/write_condetri_job.py raw; for f in *.pe_condetri_job.sh; do qsub "$$f"; done
 	rm *.pe_condetri_job.sh
 
-quality_trim_single:
+quality-trim-single:
 
-	python protocols/merge_se_reads.py raw/; \
+	python protocol/merge_se_reads.py raw/; \
 	for f in raw/*fq.se; do \
 		perl ~/condetri_v2.1.pl -fastq1=$$f -sc=33 | tee $$f.condetri_se_log; \
 	done
 
-merge_qc_trimmed_single:
+merge-qc-trimmed-single:
 
-	python protocols/merge_qc_se_reads.py raw
+	python protocol/merge_qc_se_reads.py raw
 
-fastqc_qc_trimmed:
+#fastqc_qc_trimmed:
+#
+#	module load FastQC; \
+#	if [ ! -d ../FastQC_out_trimmed ]; then \
+#		mkdir ../FastQC_out_trimmed; \
+#	fi; \
+#	for f in ../raw/*001.trim_unpaired.fastq; do \
+#		fastqc --outdir ../FastQC_out_trimmed --threads 8 --noextract $$f; \
+#	done; \
+#	for f in ../raw/*trim?.fastq; do \
+#		fastqc --outdir ../FastQC_out_trimmed --threads 8 --noextract $$f; \
+#	done	
 
-	module load FastQC; \
-	if [ ! -d ../FastQC_out_trimmed ]; then \
-		mkdir ../FastQC_out_trimmed; \
-	fi; \
-	for f in ../raw/*001.trim_unpaired.fastq; do \
-		fastqc --outdir ../FastQC_out_trimmed --threads 8 --noextract $$f; \
-	done; \
-	for f in ../raw/*trim?.fastq; do \
-		fastqc --outdir ../FastQC_out_trimmed --threads 8 --noextract $$f; \
-	done	
+interleave-pe:
 
-interleave_pe:
+	qsub protocol/interleave.sh
 
-	qsub protocols/interleave.sh
+normalize-pe:
 
-normalize_pe:
+	qsub protocol/normalize_pe.sh
 
-	qsub protocols/normalize_pe.sh
-	mv *keep raw/
+normalize-se:
 
-normalize_se:
+	qsub protocol/normalize_se.sh
 
-	qsub protocols/normalize_se.sh
-	mv *keep raw/
+filter-abund:
 
-filter_abund:
+	qsub protocol/filter_abund.sh
 
-	qsub protocols/filter_abund.sh
+extract-paired-reads:
 
-extract_paired_reads:
-
-	qsub extract_paired_reads.sh
+	qsub protocol/extract_paired_reads.sh
 
 merge_abundfilt_se:
 
-	for f in ../raw/*abundfilt.se; do \
+	for f in *abundfilt.se; do \
 		base_filename=$$(basename $$f .pe_trim.fastq.keep.abundfilt.se); \
 		unpaired_filename=$$(echo $$base_filename | sed 's/R1/R1\&2/').trim_unpaired.fastq.keep.abundfilt; \
 		new_filename=$$base_filename.se.qc.keep.abundfilt.gz; \
@@ -67,7 +65,7 @@ merge_abundfilt_se:
 
 rename_abundfilt_pe:
 
-	for f in ../raw/*.pe_trim.fastq.keep.abundfilt.pe; do \
+	for f in *.pe_trim.fastq.keep.abundfilt.pe; do \
 		newname=$$(basename $$f .pe_trim.fastq.keep.abundfilt.pe).pe.qc.keep.abundfilt; \
 		echo "renaming" $$f "to" $$newname; \
 		cp $$f $$newname; \
@@ -76,12 +74,12 @@ rename_abundfilt_pe:
 
 split_paired_reads:
 
-	for f in ../raw/*.pe.qc.keep.abundfilt.gz; do \
+	for f in *.pe.qc.keep.abundfilt.gz; do \
 	 python ~/khmer/scripts/split-paired-reads.py $$f; \
 	done
 	cat *.1 > left.fq; \
 	cat *.2 > right.fq
-	gunzip -c *.se.qc.keep.abundfilt.fq.gz >> left.fq
+	gunzip -c *.se.qc.keep.abundfilt.gz >> left.fq
 
 run_trinity:
 
