@@ -83,84 +83,36 @@ split_paired_reads:
 
 run_trinity:
 
-	qsub trinity_job.sh
+	qsub protocol/trinity.sh
+
+merge-lanes:
+
+	for one in raw/*L001*.fastq.gz; do \
+		two=$$(echo $$one | sed 's/L001/L002/'); \
+		merged=$$(echo $$one | sed 's/L001/merged/'); \
+		echo "merging " $$one " and " $$two; \
+		zcat $$one $$two > $$merged; \
+	done
+
+run-rsem-calc:
+
+	for left in raw/*merged*R1*.fastq.gz; do \
+		sample=$$(basename $$left _R1_001.fastq.gz); \
+		right=$$(echo $$left | sed 's/R1/R2/'); \
+		qsub -v input_read1=$$left,input_read2=$$right,sample_name=$$sample,index="assembly/TRANS" protocol/rsem_calculate_expr_paired.sh; \
+	done
+
 
 partition_transcripts:
 
-	python ~/khmer/scripts/do-partition.py -x 1e9 -N 4 --threads 4 taurus Trinity.fasta
+	python ~/khmer/scripts/do-partition.py -x 1e9 -N 4 --threads 4 taurus assembly/TRANS.transcripts.flt.fa
 
-seqclean_transcripts:
+run-rsem-prepare:
 
-	~/seqclean-x86_64/seqclean Trinity.fasta -c 4
+	cd assembly; ~/rsem-1.2.7/extract-transcript-to-gene-map-from-trinity Trinity.fasta Trinity.map
+	cd assembly; qsub ../protocol/rsem_prepare_reference.sh
+	cd assembly; qsub -v left="../raw/4642MAP_CGATGT_L001_R1_001.fastq.gz",right="../raw/4642MAP_CGATGT_L001_R2_001.fastq.gz" ../protocol/run_rsem.sh
 
-partition_cleaned_transcripts:
+run-blat-transcripts:
 
-	python ~/khmer/scripts/do-partition.py -x 1e9 -N 4 --threads 4 taurus Trinity.fasta.clean
-
-rename_partitions:
-
-	python ~/eel-pond/rename-with-partitions.py taurus Trinity.fasta.part
-
-download_mouse_proteins:
-
-	curl -O ftp://ftp.ncbi.nih.gov/refseq/M_musculus/mRNA_Prot/mouse.protein.faa.gz
-	gunzip mouse.protein.faa.gz
-
-download_human_proteins:
-
-	curl -O ftp://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/human.protein.faa.gz
-	gunzip human.protein.faa.gz
-	
-download_cow_proteins:
-
-	curl -O ftp://ftp.ncbi.nih.gov/refseq/B_taurus/mRNA_Prot/cow.protein.faa.gz
-	guzip cow.protein.faa.gz
-
-build_blastdb:
-
-	formatdb -i Trinity.fasta.part.renamed.fasta -o T -p F
-	formatdb -i mouse.protein.faa -o T -p T
-
-build_blastdb_human:
-
-	formatdb -i human.protein.faa -o T -p T
-	
-build_blastdb_cow:
-
-	formatdb -i cow.protein.faa -o T -p T
-
-reciprocal_blast:
-
-	qsub run_blast_cow_x_mouse.sh
-	qsub run_blast_mouse_x_cow.sh
-
-annotate:
-
-	python ~/eel-pond/make-uni-best-hits.py cow.x.mouse cow.x.mouse.homol
-	python ~/eel-pond/make-reciprocal-best-hits.py cow.x.mouse mouse.x.cow cow.x.mouse.ortho
-	python ~/eel-pond/make-namedb.py mouse.protein.faa mouse.namedb
-	python -m screed.fadbm mouse.protein.faa
-	python ~/eel-pond/annotate-seqs.py Trinity.fasta.part.renamed.fasta cow.x.mouse.ortho cow.x.mouse.homol
-
-tophat_map:
-
-	python write_tophat_job.py ../qc_trimmed
-	for f in *tophat_job.sh; do \
-		qsub $$f; \
-	done
-
-rsem:
-
-	cd /mnt/ls12/preeyanon/cattle_map/paired/assembly/trinity_out_dir_stranded_new_partitions; \
-	extract-transcript-to-gene-map-from-trinity Trinity.fasta.part.renamed.fasta Trinity.mapfile
-	cd /mnt/ls12/preeyanon/cattle_map/paired/assembly/trinity_out_dir_stranded_new_partitions; \
-	rsem-prepare-reference --transcript-to-gene-map --no-bowtie Trinity.mapfile Trinity.fasta.part.renamed.fasta taurus
-
-count_reads:
-
-	samtools view -S -H 4642MAP_CGATGT_L001_cdna_bowtie2_raw.sam | python header_to_bed.py > sequences.bed
-
-clean:
-
-	rm *pe_trim_unpaired.fastq; \
-	rm *se_trim.fastq
+	cd assembly; qsub -v input="TRANS.transcripts.flt.fa" ../protocol/blat_job.sh
